@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "AxiomCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class PROJECTAXIOM_API AAxiomCharacter : public ACharacter
 {
@@ -20,5 +23,13 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	// 1st person view (arms)
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USkeletalMeshComponent> Mesh1P;
 	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USpringArmComponent> SpringArm;
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UCameraComponent> FirstPersonCamera;
 };
