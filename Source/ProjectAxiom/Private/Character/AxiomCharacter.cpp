@@ -1,6 +1,6 @@
 // Copyright Zel Suarez
 
-#include "AxiomCharacter.h"
+#include "Character/AxiomCharacter.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
