@@ -4,11 +4,14 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 AAxiomCharacter::AAxiomCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
+	GetCharacterMovement()->MovementState.bCanCrouch = true;
 	
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
 	SpringArm->SetupAttachment(GetRootComponent());

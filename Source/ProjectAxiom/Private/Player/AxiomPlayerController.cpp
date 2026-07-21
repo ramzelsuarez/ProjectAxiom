@@ -73,7 +73,8 @@ void AAxiomPlayerController::Input_Move(const FInputActionValue& InputActionValu
 	
 	if (APawn* ControlledPawn = GetPawn())
 	{
-		
+		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
 }
 
