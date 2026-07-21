@@ -1,0 +1,15 @@
+Copyright (c) 2026 Zel Suarez
+
+All rights reserved.
+
+This project was created as a personal learning and portfolio project using Unreal Engine 5.8.
+
+Some gameplay architecture and implementation are based on educational material from Stephen Ulibarri's Unreal Engine Multiplayer FPS course. All original course materials, assets, and instructional content remain the property of their respective owners.
+
+The original source code, custom gameplay systems, modifications, and project structure created for Project Axiom are Copyright (c) 2026 Zel Suarez.
+
+This repository is provided for portfolio and educational demonstration purposes only.
+
+No part of this project may be copied, redistributed, modified, or used commercially without prior written permission from the author.
+
+Unreal Engine is a trademark of Epic Games, Inc.

@@ -159,6 +159,12 @@ Project Axiom is based on Stephen Ulibarri’s Unreal Engine 5 multiplayer first
 
 Course assets and instructional material belong to their respective creators. This repository documents my implementation, study progress, modifications, debugging work and continued development of the project.
 
+## License
+
+This repository is provided for portfolio purposes only.
+
+See the LICENSE file for details.
+
 ## Author
 
 **Ramzel Suarez**  
