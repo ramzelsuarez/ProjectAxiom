@@ -12,14 +12,21 @@ class PROJECTAXIOM_API AWeapon : public AActor
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	AWeapon();
+	
+	USkeletalMeshComponent* GetMesh1P() const;
+	USkeletalMeshComponent* GetMesh3P() const;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	
+private:
+	
+	// Weapon Mesh: 1st Person view
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USkeletalMeshComponent> Mesh1P;
+	
+	// Weapon Mesh: 3rd Person view
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USkeletalMeshComponent> Mesh3P;
 };
