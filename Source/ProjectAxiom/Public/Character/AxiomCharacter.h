@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AxiomCharacter.generated.h"
 
+class UAxiomCombatComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -23,6 +24,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UAxiomCombatComponent> Combat;
+	
 	// 1st person view (arms)
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USkeletalMeshComponent> Mesh1P;

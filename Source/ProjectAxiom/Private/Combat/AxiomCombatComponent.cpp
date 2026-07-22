@@ -1,33 +1,40 @@
 // Copyright Zel Suarez
 
 
-// Sets default values for this component's properties
+#include "Combat/AxiomCombatComponent.h"
+
+
 UAxiomCombatComponent::UAxiomCombatComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-}
-
-
-// Called when the game starts
-void UAxiomCombatComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
 	
 }
 
-
-// Called every frame
 void UAxiomCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                           FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+
+}
+
+void UAxiomCombatComponent::Initiate_CycleWeapon()
+{
+}
+
+void UAxiomCombatComponent::Initiate_FireWeapon_Pressed()
+{
+}
+
+void UAxiomCombatComponent::Initiate_FireWeapon_Released()
+{
+}
+
+void UAxiomCombatComponent::Initiate_Aim_Pressed()
+{
+}
+
+void UAxiomCombatComponent::Initiate_Aim_Released()
+{
 }
 

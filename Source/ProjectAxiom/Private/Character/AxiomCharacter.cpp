@@ -3,6 +3,7 @@
 #include "Character/AxiomCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "Combat/AxiomCombatComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -36,6 +37,9 @@ AAxiomCharacter::AAxiomCharacter()
 	GetMesh()->bOnlyOwnerSee = false;
 	GetMesh()->bOwnerNoSee = true;
 	GetMesh()->bReceivesDecals = false;
+	
+	Combat = CreateDefaultSubobject<UAxiomCombatComponent>("Combat");
+	Combat->SetIsReplicated(true);
 }
 
 void AAxiomCharacter::BeginPlay()
