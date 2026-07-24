@@ -18,6 +18,7 @@ class PROJECTAXIOM_API UAxiomCombatComponent : public UActorComponent
 public:
 	UAxiomCombatComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// Cycle to next weapon in inventory
 	void Initiate_CycleWeapon();
@@ -35,8 +36,12 @@ public:
 protected:
 
 private:
+	
+	UPROPERTY(Transient, Replicated)
+	TArray<AWeapon*> Inventory;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "FPS|Weapon")
-	TSubclassOf<AWeapon> DefaultWeaponClass;
+	TArray<TSubclassOf<AWeapon>> DefaultWeaponClasses;
 	
 	AWeapon* SpawnWeapon(TSubclassOf<AWeapon> WeaponClass) const;
 };
