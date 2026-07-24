@@ -4,7 +4,7 @@
 
 ## Overview
 
-Project Axiom is a gameplay programming portfolio project focused on building a scalable, data-driven multiplayer first-person shooter.
+Project Axiom is an Unreal Engine 5.8 gameplay programming portfolio project focused on building a scalable, modular, data-driven multiplayer first-person shooter. The project emphasizes server-authoritative networking, reusable C++ systems, and asset-driven gameplay architecture to support rapid feature expansion while maintaining clean and maintainable code.
 
 The project is designed to support dedicated servers, listen servers, and standalone single-player play. Its gameplay systems are implemented with server authority while preserving a responsive client-side experience.
 
