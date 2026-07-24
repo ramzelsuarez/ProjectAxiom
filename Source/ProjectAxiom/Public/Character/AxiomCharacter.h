@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/PlayerInterface.h"
 #include "AxiomCharacter.generated.h"
 
 class UAxiomCombatComponent;
@@ -12,7 +14,7 @@ class USpringArmComponent;
 class UInputAction;
 
 UCLASS()
-class PROJECTAXIOM_API AAxiomCharacter : public ACharacter
+class PROJECTAXIOM_API AAxiomCharacter : public ACharacter, public IPlayerInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +23,10 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	/** PlayerInterface */
+	virtual FName GetWeaponAttachPoint_Implementation(const FGameplayTag& WeaponType) const override;
+	/** ~PlayerInterface */
 protected:
 	virtual void BeginPlay() override;
 

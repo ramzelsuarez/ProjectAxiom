@@ -7,6 +7,8 @@
 #include "AxiomCombatComponent.generated.h"
 
 
+class UWeaponData;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PROJECTAXIOM_API UAxiomCombatComponent : public UActorComponent
 {
@@ -24,6 +26,8 @@ public:
 	void Initiate_Aim_Pressed();
 	void Initiate_Aim_Released();
 	
+	UPROPERTY(EditDefaultsOnly, Category = "FPS|Weapon")
+	TObjectPtr<UWeaponData> WeaponData;
 protected:
 
 private:

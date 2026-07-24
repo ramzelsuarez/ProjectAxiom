@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Combat/AxiomCombatComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Data/WeaponData.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -67,6 +68,12 @@ void AAxiomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	AxiomInputComponent->BindAction(AimWeaponAction, ETriggerEvent::Started, this, &ThisClass::Input_Aim_Pressed);
 	AxiomInputComponent->BindAction(AimWeaponAction, ETriggerEvent::Completed, this, &ThisClass::Input_Aim_Released);
 	AxiomInputComponent->BindAction(ReloadWeaponAction, ETriggerEvent::Started, this, &ThisClass::Input_ReloadWeapon);
+}
+
+FName AAxiomCharacter::GetWeaponAttachPoint_Implementation(const FGameplayTag& WeaponType) const
+{
+	checkf(Combat->WeaponData, TEXT("No Weapon Data Asset - Please fill out BP_ShooterCharacter"));
+	return Combat->WeaponData->GripPoints.FindChecked(WeaponType);
 }
 
 void AAxiomCharacter::Input_CycleWeapon()
