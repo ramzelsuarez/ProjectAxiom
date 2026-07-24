@@ -28,6 +28,7 @@ void UAxiomCombatComponent::GetLifetimeReplicatedProps(TArray<class FLifetimePro
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME(UAxiomCombatComponent, Inventory);
+	DOREPLIFETIME(UAxiomCombatComponent, CurrentWeapon);
 }
 
 void UAxiomCombatComponent::Initiate_CycleWeapon()
@@ -90,6 +91,12 @@ void UAxiomCombatComponent::Initiate_Aim_Released()
 		false);
 }
 
+void UAxiomCombatComponent::Equip(AWeapon* Weapon)
+{
+	CurrentWeapon = Weapon;
+	CurrentWeapon->AttachToOwningPawn();
+}
+
 void UAxiomCombatComponent::SpawnInventory()
 {
 	if (GetOwner()->GetLocalRole() < ROLE_Authority) return;
@@ -102,13 +109,25 @@ void UAxiomCombatComponent::SpawnInventory()
 	
 	if (Inventory.Num() > 0)
 	{
-		Inventory[0]->AttachToOwningPawn();
+		Equip(Inventory[0]);
 	}
 }
 
 void UAxiomCombatComponent::DestroyInventory()
 {
-	// TODO: Destroy the inventory once we made one.
+	for (AWeapon* Weapon : Inventory)
+	{
+		if (IsValid(Weapon))
+		{
+			Weapon->Destroy();
+		}
+	}
+}
+
+void UAxiomCombatComponent::OnRep_CurrentWeapon(AWeapon* LastWeapon)
+{
+	if (!IsValid(CurrentWeapon)) return;
+	CurrentWeapon->AttachToOwningPawn();
 }
 
 AWeapon* UAxiomCombatComponent::SpawnWeapon(TSubclassOf<AWeapon> WeaponClass) const

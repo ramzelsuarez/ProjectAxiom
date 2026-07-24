@@ -50,6 +50,16 @@ void AAxiomCharacter::BeginPlay()
 	
 }
 
+void AAxiomCharacter::BeginDestroy()
+{
+	Super::BeginDestroy();
+	
+	if (IsValid(Combat))
+	{
+		Combat->DestroyInventory();
+	}
+}
+
 void AAxiomCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

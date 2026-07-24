@@ -29,12 +29,13 @@ public:
 	virtual FName GetWeaponAttachPoint_Implementation(const FGameplayTag& WeaponType) const override;
 	virtual USkeletalMeshComponent* GetMesh1P_Implementation() const override;
 	virtual USkeletalMeshComponent* GetMesh3P_Implementation() const override;
-	
 	/** ~PlayerInterface */
 	
-protected:
 	virtual void BeginPlay() override;
-
+	virtual void BeginDestroy() override;
+	
+protected:
+	
 private:
 	
 	void Input_CycleWeapon();
