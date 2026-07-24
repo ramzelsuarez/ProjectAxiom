@@ -3,6 +3,8 @@
 
 #include "Combat/AxiomCombatComponent.h"
 
+#include "Weapon/Weapon.h"
+
 
 UAxiomCombatComponent::UAxiomCombatComponent()
 {
@@ -78,3 +80,27 @@ void UAxiomCombatComponent::Initiate_Aim_Released()
 		false);
 }
 
+void UAxiomCombatComponent::SpawnInventory()
+{
+	AWeapon* NewWeapon = SpawnWeapon(DefaultWeaponClass);
+	
+}
+
+void UAxiomCombatComponent::DestroyInventory()
+{
+	// TODO: Destroy the inventory once we made one.
+}
+
+AWeapon* UAxiomCombatComponent::SpawnWeapon(TSubclassOf<AWeapon> WeaponClass) const
+{
+	AActor* OwningActor = GetOwner();
+	if (!IsValid(OwningActor)) return nullptr;
+	if (OwningActor->GetLocalRole() < ROLE_Authority) return nullptr;
+	
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.Instigator = Cast<APawn>(OwningActor);
+	SpawnInfo.Owner = OwningActor;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+	return GetWorld()->SpawnActor<AWeapon>(WeaponClass, SpawnInfo);
+}
