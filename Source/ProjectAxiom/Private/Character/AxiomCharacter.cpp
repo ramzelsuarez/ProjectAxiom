@@ -85,6 +85,16 @@ FName AAxiomCharacter::GetWeaponAttachPoint_Implementation(const FGameplayTag& W
 	return Combat->WeaponData->GripPoints.FindChecked(WeaponType);
 }
 
+USkeletalMeshComponent* AAxiomCharacter::GetMesh1P_Implementation() const
+{
+	return Mesh1P;
+}
+
+USkeletalMeshComponent* AAxiomCharacter::GetMesh3P_Implementation() const
+{
+	return GetMesh();
+}
+
 void AAxiomCharacter::Input_CycleWeapon()
 {
 	Combat->Initiate_CycleWeapon();

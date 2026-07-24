@@ -3,6 +3,8 @@
 
 #include "Combat/AxiomCombatComponent.h"
 
+#include "Engine/Engine.h"
+#include "GameFramework/Pawn.h"
 #include "Weapon/Weapon.h"
 
 
@@ -84,6 +86,10 @@ void UAxiomCombatComponent::SpawnInventory()
 {
 	AWeapon* NewWeapon = SpawnWeapon(DefaultWeaponClass);
 	
+	if (IsValid(NewWeapon))
+	{
+		NewWeapon->AttachToOwningPawn();
+	}
 }
 
 void UAxiomCombatComponent::DestroyInventory()
