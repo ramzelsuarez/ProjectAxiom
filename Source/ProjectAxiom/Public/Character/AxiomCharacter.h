@@ -37,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FRotator GetFixedAimRotation() const;
 	
+	UPROPERTY(BlueprintReadOnly, Category = "FPS|FABRIK")
+	FTransform FABRIK_SocketTransform;
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Combat")
 	TObjectPtr<UAxiomCombatComponent> Combat;
@@ -59,7 +62,7 @@ private:
 	void Input_Aim_Pressed();
 	void Input_Aim_Released();
 	
-
+	void CalculateFABRIK_SocketTransform();
 	
 	// 1st person view (arms)
 	UPROPERTY(VisibleAnywhere)
