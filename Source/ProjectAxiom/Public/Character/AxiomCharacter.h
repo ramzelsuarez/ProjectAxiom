@@ -34,6 +34,9 @@ public:
 	virtual void BeginPlay() override;
 	virtual void BeginDestroy() override;
 	
+	UFUNCTION(BlueprintCallable)
+	FRotator GetFixedAimRotation() const;
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Combat")
 	TObjectPtr<UAxiomCombatComponent> Combat;
