@@ -79,12 +79,54 @@ FRotator AAxiomCharacter::GetFixedAimRotation() const
 	return AimRotation;
 }
 
+bool AAxiomCharacter::HasCurrentWeapon() const
+{
+	return IsValid(Combat) && Combat->CurrentWeapon != nullptr;
+}
+
 void AAxiomCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	CalculateTurnInPlaceParameters();
 	CalculateFABRIK_SocketTransform();
 }
+
+void AAxiomCharacter::CalculateTurnInPlaceParameters()
+{
+	// Get velocity, see if 0; 0 means standing still
+	// See if we are falling
+	
+	// if standing still and not jumping
+		// get current aim rotation
+		// get delta aim rotation - the difference in rotation of my current aim rotation from the initial aim rotation
+		// (initial aim rotation is calculated in BeginPlay)
+		// Store the Yaw of the delta aim rotation (AO_Yaw)
+		// if TurningStatus == NotTurning
+			// Set InterpAO_Yaw to AO_Yaw
+		// TurnInPlace() - interpolates the InterAO_Yaw value to 0
+	
+	// if running or jumping
+		// reset initial aim rotation to the current actual aim rotation
+		// AO_Yaw = 0
+		// We also need a Movement Offset Yaw to feed out strafing blendspaces
+		// Get Base Aim Rotation
+		// Get our Movement Rotation - this is the rotation of our Velocity
+		// Movement Offset Yaw = the delta between our movement rotation and our aim rotation
+		// TurningStatus = NotTurning
+	
+}
+
+// Turn In Place
+	// if AO_Yaw > 90
+		// TurningStatus = Right
+	// else if AO_Yaw < -90
+		// TurningStatus = Left
+	// if TurningStatus != NotTurning (in other words, we are turning left or right)
+		// Interpolate InterpAO_Yaw down to 0
+		// AO_Yaw = InterpAO_Yaw
+		// if Abs(AO_Yaw) < 5.f
+			// TurningStatus = NotTurning
+			// reset initial aim rotation to our actual aim rotation
 
 void AAxiomCharacter::CalculateFABRIK_SocketTransform()
 {
