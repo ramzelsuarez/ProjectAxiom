@@ -6,6 +6,7 @@
 #include "GameplayTagContainer.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/PlayerInterface.h"
+#include "ShooterTypes/ShooterTypes.h"
 #include "AxiomCharacter.generated.h"
 
 class UAxiomCombatComponent;
@@ -56,6 +57,15 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnAim(bool bIsAiming);
 	
+	UPROPERTY(BlueprintReadOnly, Category = "FPS|TurnInPlace")
+	float AO_Yaw;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "FPS|Strafing")
+	float MovementOffsetYaw;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "FPS|TurnInPlace")
+	ETurningInPlace TurningStatus;
+	
 private:
 	
 	void Input_CycleWeapon();
@@ -66,7 +76,11 @@ private:
 	void Input_Aim_Released();
 	
 	void CalculateFABRIK_SocketTransform();
-	void CalculateTurnInPlaceParameters();
+	void CalculateTurnInPlaceParameters(float DeltaTime);
+	void TurnInPlace(float DeltaTime);
+	
+	FRotator StartingAimRotation;
+	float InterpAO_Yaw;
 	
 	// 1st person view (arms)
 	UPROPERTY(VisibleAnywhere)
