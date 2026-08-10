@@ -29,6 +29,7 @@ void UAxiomCombatComponent::GetLifetimeReplicatedProps(TArray<class FLifetimePro
 	
 	DOREPLIFETIME(UAxiomCombatComponent, Inventory);
 	DOREPLIFETIME(UAxiomCombatComponent, CurrentWeapon);
+	DOREPLIFETIME_CONDITION(UAxiomCombatComponent, bAiming, COND_SkipOwner);
 }
 
 void UAxiomCombatComponent::Initiate_CycleWeapon()
@@ -73,22 +74,24 @@ void UAxiomCombatComponent::Initiate_FireWeapon_Released()
 
 void UAxiomCombatComponent::Initiate_Aim_Pressed()
 {
-	GEngine->AddOnScreenDebugMessage(
-		-1, 
-		5.f, 
-		FColor::Cyan, 
-		TEXT("Initiate_Aim_Pressed"), 
-		false);
+	Local_Aim(true);
+	Server_Aim(true);
 }
 
 void UAxiomCombatComponent::Initiate_Aim_Released()
 {
-	GEngine->AddOnScreenDebugMessage(
-		-1, 
-		5.f, 
-		FColor::Cyan, 
-		TEXT("Initiate_Aim_Released"), 
-		false);
+	Local_Aim(false);
+	Server_Aim(false);
+}
+
+void UAxiomCombatComponent::Server_Aim_Implementation(bool bPressed)
+{
+	Local_Aim(bPressed);
+}
+
+void UAxiomCombatComponent::Local_Aim(bool bPressed)
+{
+	bAiming = bPressed;
 }
 
 void UAxiomCombatComponent::Equip(AWeapon* Weapon)

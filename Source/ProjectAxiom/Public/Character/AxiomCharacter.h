@@ -35,6 +35,8 @@ public:
 	virtual void BeginDestroy() override;
 	
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Combat")
+	TObjectPtr<UAxiomCombatComponent> Combat;	
 	
 private:
 	
@@ -45,8 +47,7 @@ private:
 	void Input_Aim_Pressed();
 	void Input_Aim_Released();
 	
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UAxiomCombatComponent> Combat;
+
 	
 	// 1st person view (arms)
 	UPROPERTY(VisibleAnywhere)
