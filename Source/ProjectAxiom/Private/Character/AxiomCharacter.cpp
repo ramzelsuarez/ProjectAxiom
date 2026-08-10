@@ -42,11 +42,15 @@ AAxiomCharacter::AAxiomCharacter()
 	
 	Combat = CreateDefaultSubobject<UAxiomCombatComponent>("Combat");
 	Combat->SetIsReplicated(true);
+	
+	DefaultFieldOfView = 90.0f;
 }
 
 void AAxiomCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	FirstPersonCamera->SetFieldOfView(DefaultFieldOfView);
 	
 }
 
@@ -128,9 +132,11 @@ void AAxiomCharacter::Input_FireWeapon_Released()
 void AAxiomCharacter::Input_Aim_Pressed()
 {
 	Combat->Initiate_Aim_Pressed();
+	OnAim(true);
 }
 
 void AAxiomCharacter::Input_Aim_Released()
 {
 	Combat->Initiate_Aim_Released();
+	OnAim(false);
 }

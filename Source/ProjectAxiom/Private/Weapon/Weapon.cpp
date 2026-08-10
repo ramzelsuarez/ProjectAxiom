@@ -26,6 +26,8 @@ AWeapon::AWeapon()
 	Mesh3P->SetupAttachment(Mesh1P);
 	Mesh3P->SetHiddenInGame(true);
 	
+	AimFieldOfView = 65.0f;
+	
 }
 
 void AWeapon::OnRep_Instigator()
