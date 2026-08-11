@@ -98,6 +98,7 @@ void AWeapon::WeaponTrace(FHitResult& OutHit, float TraceLength)
 			QueryParams,
 			ResponseParams);
 		
+		/*
 		DrawDebugSphereTraceSingle(
 			GetWorld(),
 			Start,
@@ -108,9 +109,16 @@ void AWeapon::WeaponTrace(FHitResult& OutHit, float TraceLength)
 			OutHit,
 			FColor::Green,
 			FColor::Red,
-			5.f);
+			5.f);*/
 	}
 
+}
+
+void AWeapon::Local_Fire(const FVector& ImpactPoint, const FVector& ImpactNormal,
+	TEnumAsByte<EPhysicalSurface> ImpactSurfaceType, bool bIsFirstPerson)
+{
+	// local fire stuff...
+	FireEffects(ImpactPoint, ImpactNormal, ImpactSurfaceType, bIsFirstPerson);
 }
 
 void AWeapon::BeginPlay()
