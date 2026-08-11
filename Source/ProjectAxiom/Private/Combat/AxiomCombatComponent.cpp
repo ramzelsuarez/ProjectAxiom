@@ -3,6 +3,7 @@
 
 #include "Combat/AxiomCombatComponent.h"
 
+#include "TimerManager.h"
 #include "Data/WeaponData.h"
 #include "Engine/Engine.h"
 #include "GameFramework/Pawn.h"
@@ -16,7 +17,8 @@ UAxiomCombatComponent::UAxiomCombatComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	
 	TraceLength = 20'000;
-	
+	bAiming = false;
+	bTriggerPressed = false;
 }
 
 void UAxiomCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -58,6 +60,7 @@ void UAxiomCombatComponent::Initiate_ReloadWeapon()
 
 void UAxiomCombatComponent::Initiate_FireWeapon_Pressed()
 {
+	bTriggerPressed = true;
 	Local_FireWeapon();
 }
 
@@ -79,7 +82,18 @@ void UAxiomCombatComponent::Local_FireWeapon()
 	EPhysicalSurface ImpactSurfaceType = Hit.PhysMaterial.IsValid(false) ? Hit.PhysMaterial->SurfaceType.GetValue():SurfaceType1;
 	CurrentWeapon->Local_Fire(Hit.ImpactPoint, Hit.ImpactNormal, ImpactSurfaceType, true);
 	
+	GetWorld()->GetTimerManager().SetTimer(FireTimer, this, &ThisClass::FireTimerFinished, CurrentWeapon->FireTime);
 	Server_FireWeapon(Hit);
+}
+
+void UAxiomCombatComponent::FireTimerFinished()
+{
+	if (!IsValid(CurrentWeapon)) return;
+	
+	if (bTriggerPressed && CurrentWeapon->FireType == EFireType::Auto)
+	{
+		Local_FireWeapon();
+	}
 }
 
 void UAxiomCombatComponent::Server_FireWeapon_Implementation(const FHitResult& Hit)
@@ -112,7 +126,7 @@ void UAxiomCombatComponent::Multicast_FireWeapon_Implementation(const FHitResult
 
 void UAxiomCombatComponent::Initiate_FireWeapon_Released()
 {
-	
+	bTriggerPressed = false;
 }
 
 void UAxiomCombatComponent::Initiate_Aim_Pressed()
