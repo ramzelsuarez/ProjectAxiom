@@ -3,8 +3,10 @@
 
 #include "Combat/AxiomCombatComponent.h"
 
+#include "Data/WeaponData.h"
 #include "Engine/Engine.h"
 #include "GameFramework/Pawn.h"
+#include "Interfaces/PlayerInterface.h"
 #include "Net/UnrealNetwork.h"
 #include "Weapon/Weapon.h"
 
@@ -54,22 +56,51 @@ void UAxiomCombatComponent::Initiate_ReloadWeapon()
 
 void UAxiomCombatComponent::Initiate_FireWeapon_Pressed()
 {
-	GEngine->AddOnScreenDebugMessage(
-		-1, 
-		5.f, 
-		FColor::Cyan, 
-		TEXT("Initiate_FireWeapon_Pressed"), 
-		false);
+	Local_FireWeapon();
+}
+
+void UAxiomCombatComponent::Local_FireWeapon()
+{
+	ensure (IsValid(WeaponData));
+	
+	UAnimMontage* Montage1P = WeaponData->FirstPersonMontages.FindChecked(CurrentWeapon->WeaponType).FireMontage;
+	USkeletalMeshComponent* Mesh1P = IPlayerInterface::Execute_GetMesh1P(GetOwner());
+	if (IsValid(Montage1P) && IsValid(Mesh1P))
+	{
+		Mesh1P->GetAnimInstance()->Montage_Play(Montage1P);
+	}
+	
+	Server_FireWeapon();
+}
+
+void UAxiomCombatComponent::Server_FireWeapon_Implementation()
+{
+	Multicast_FireWeapon();
+}
+
+void UAxiomCombatComponent::Multicast_FireWeapon_Implementation()
+{
+	APawn* OwningPawn = Cast<APawn>(GetOwner());
+	if (OwningPawn->IsLocallyControlled())
+	{
+		// do locally-controlled stuff
+	}
+	else
+	{
+		ensure (IsValid(WeaponData));
+	
+		UAnimMontage* Montage3P = WeaponData->ThirdPersonMontages.FindChecked(CurrentWeapon->WeaponType).FireMontage;
+		USkeletalMeshComponent* Mesh3P = IPlayerInterface::Execute_GetMesh3P(GetOwner());
+		if (IsValid(Montage3P) && IsValid(Mesh3P))
+		{
+			Mesh3P->GetAnimInstance()->Montage_Play(Montage3P);
+		}
+	}
 }
 
 void UAxiomCombatComponent::Initiate_FireWeapon_Released()
 {
-	GEngine->AddOnScreenDebugMessage(
-		-1, 
-		5.f, 
-		FColor::Cyan, 
-		TEXT("Initiate_FireWeapon_Released"), 
-		false);
+	
 }
 
 void UAxiomCombatComponent::Initiate_Aim_Pressed()
