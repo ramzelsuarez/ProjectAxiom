@@ -1,5 +1,6 @@
 // Copyright Zel Suarez
 
+
 #include "Character/AxiomCharacter.h"
 
 #include "EnhancedInputComponent.h"
@@ -47,6 +48,7 @@ AAxiomCharacter::AAxiomCharacter()
 	
 	DefaultFieldOfView = 90.0f;
 	TurningStatus = ETurningInPlace::NotTurning;
+	bWeaponFirstReplicated = false;
 }
 
 void AAxiomCharacter::BeginPlay()
@@ -195,6 +197,16 @@ void AAxiomCharacter::PossessedBy(AController* NewController)
 	}
 }
 
+void AAxiomCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	
+	if (IsValid(Combat))
+	{
+		Combat->InitializeWeaponWidgets();
+	}
+}
+
 FName AAxiomCharacter::GetWeaponAttachPoint_Implementation(const FGameplayTag& WeaponType) const
 {
 	checkf(Combat->WeaponData, TEXT("No Weapon Data Asset - Please fill out BP_ShooterCharacter"));
@@ -209,6 +221,20 @@ USkeletalMeshComponent* AAxiomCharacter::GetMesh1P_Implementation() const
 USkeletalMeshComponent* AAxiomCharacter::GetMesh3P_Implementation() const
 {
 	return GetMesh();
+}
+
+void AAxiomCharacter::WeaponReplicated_Implementation()
+{
+	if (!bWeaponFirstReplicated)
+	{
+		bWeaponFirstReplicated = true;
+		OnWeaponFirstReplicated.Broadcast(Combat->CurrentWeapon);
+	}
+}
+
+AWeapon* AAxiomCharacter::GetCurrentWeapon_Implementation()
+{
+	return Combat->CurrentWeapon;
 }
 
 void AAxiomCharacter::Input_CycleWeapon()

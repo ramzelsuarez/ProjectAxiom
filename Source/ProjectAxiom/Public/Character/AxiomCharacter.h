@@ -13,6 +13,9 @@ class UAxiomCombatComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UInputAction;
+class AWeapon;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FWeaponFirstReplicated, AWeapon*, Weapon);
 
 UCLASS()
 class PROJECTAXIOM_API AAxiomCharacter : public ACharacter, public IPlayerInterface
@@ -25,11 +28,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 	
 	/** PlayerInterface */
 	virtual FName GetWeaponAttachPoint_Implementation(const FGameplayTag& WeaponType) const override;
 	virtual USkeletalMeshComponent* GetMesh1P_Implementation() const override;
 	virtual USkeletalMeshComponent* GetMesh3P_Implementation() const override;
+	virtual void WeaponReplicated_Implementation() override;
+	virtual AWeapon* GetCurrentWeapon_Implementation() override;
 	/** ~PlayerInterface */
 	
 	virtual void BeginPlay() override;
@@ -43,6 +49,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool HasCurrentWeapon() const;
+	
+	UPROPERTY(BlueprintAssignable)
+	FWeaponFirstReplicated OnWeaponFirstReplicated;
+	
+	bool HasWeaponFirstReplicated() const { return bWeaponFirstReplicated; }
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Combat")
@@ -79,6 +90,7 @@ private:
 	void CalculateTurnInPlaceParameters(float DeltaTime);
 	void TurnInPlace(float DeltaTime);
 	
+	bool bWeaponFirstReplicated;
 	FRotator StartingAimRotation;
 	float InterpAO_Yaw;
 	

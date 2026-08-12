@@ -15,7 +15,10 @@ public class ProjectAxiom : ModuleRules
 			"Engine", 
 			"InputCore", 
 			"GameplayTags",
-			"PhysicsCore"
+			"PhysicsCore",
+			"UMG",
+			"Slate",
+			"SlateCore"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput" });
