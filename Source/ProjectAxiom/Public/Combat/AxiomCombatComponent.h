@@ -14,6 +14,7 @@ class UWeaponData;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FReticleChanged, UMaterialInstanceDynamic*, ReticleDynMatInst);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAmmoCounterChanged, UMaterialInstanceDynamic*, AmmoCounterDynMatInst, int32, RoundsCurrent, int32, RoundsMax);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRoundFired, int32, RoundsCurrent, int32, RoundsMax);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PROJECTAXIOM_API UAxiomCombatComponent : public UActorComponent
@@ -41,6 +42,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FAmmoCounterChanged OnAmmoCounterChanged;
+	
+	UPROPERTY(BlueprintAssignable)
+	FRoundFired OnRoundFired;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FPS|Weapon")
 	TObjectPtr<UWeaponData> WeaponData;
