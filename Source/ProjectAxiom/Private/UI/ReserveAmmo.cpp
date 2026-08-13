@@ -34,6 +34,12 @@ void UReserveAmmo::NativeOnInitialized()
 	{
 		AxiomCharacter->OnWeaponFirstReplicated.AddDynamic(this, &ThisClass::OnWeaponFirstReplicated);
 	}
+	if (AxiomCharacter->HasAuthority())
+	{
+		AWeapon* Weapon = IPlayerInterface::Execute_GetCurrentWeapon(AxiomCharacter);
+		if (!IsValid(Weapon)) return;
+		OnCurrentReserveAmmoChanged(IPlayerInterface::Execute_GetReserveAmmo(AxiomCharacter), Weapon->Ammo);
+	}
 }
 
 void UReserveAmmo::OnPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
