@@ -158,6 +158,31 @@ void UAxiomCombatComponent::Notify_ReloadWeapon()
 	}
 }
 
+void UAxiomCombatComponent::AddAmmo(const FGameplayTag WeaponType, int32 AmmoAmount)
+{
+	if (GetOwner()->HasAuthority() && !IsValid(CurrentWeapon)) return;
+	
+	if (ReserveAmmo.Contains(WeaponType))
+	{
+		ReserveAmmo.Add(WeaponType, AmmoAmount);
+	}
+	
+	const int32 NewAmmo = ReserveAmmo.FindChecked(WeaponType) + AmmoAmount;
+	ReserveAmmo[WeaponType] = NewAmmo;
+	
+	if (CurrentWeapon->WeaponType.MatchesTagExact(WeaponType))
+	{
+		CurrentReserveAmmo = NewAmmo;
+		if (CurrentWeapon->Ammo == 0 && NewAmmo > 0)
+		{
+			Server_ReloadWeapon();
+		}
+		
+		OnAmmoCounterChanged.Broadcast(CurrentWeapon->GetAmmoCounterDynamicMaterialInstance(), CurrentWeapon->Ammo, CurrentWeapon->MagCapacity);
+		OnCurrentReserveAmmoChanged.Broadcast(CurrentReserveAmmo, CurrentWeapon->Ammo, CurrentWeapon->WeaponIcon);
+	}
+}
+
 void UAxiomCombatComponent::Client_ReloadWeapon_Implementation(int32 NewWeaponAmmo, int32 NewCarriedAmmo)
 {
 	APawn* OwningPawn = Cast<APawn>(GetOwner());

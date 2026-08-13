@@ -252,6 +252,14 @@ void AAxiomCharacter::Notify_ReloadWeapon_Implementation()
 	Combat->Notify_ReloadWeapon();
 }
 
+void AAxiomCharacter::AddAmmo_Implementation(const FGameplayTag& WeaponType, int32 AmmoAmount)
+{
+	if (HasAuthority() && IsValid(Combat))
+	{
+		Combat->AddAmmo(WeaponType, AmmoAmount);
+	}
+}
+
 void AAxiomCharacter::Input_CycleWeapon()
 {
 	Combat->Initiate_CycleWeapon();
