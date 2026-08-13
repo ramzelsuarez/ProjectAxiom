@@ -18,6 +18,17 @@ enum class EFireType : uint8
 	SemiAuto UMETA(DisplayName = "SemiAutomatic")
 };
 
+UENUM(BlueprintType)
+enum class EWeaponStatus : uint8
+{
+	Idle,		// Weapon doing nothing, can fire/reload/cycle
+	Firing,		// Currently firing, can't reload/cycle
+	Reloading,	// Currently reloading, can't fire/cycle
+	Cycling,	// Currently cycling to the next weapon, can't fire/reload/cycle
+	Unequipped	// On the person, but can't do anything
+};
+
+
 UCLASS()
 class PROJECTAXIOM_API AWeapon : public AActor
 {
@@ -25,14 +36,13 @@ class PROJECTAXIOM_API AWeapon : public AActor
 
 public:
 	AWeapon();
-	virtual void OnRep_Instigator() override;
 	
 	USkeletalMeshComponent* GetMesh1P() const;
 	USkeletalMeshComponent* GetMesh3P() const;
 	UMaterialInstanceDynamic* GetReticleDynamicMaterialInstance();
 	UMaterialInstanceDynamic* GetAmmoCounterDynamicMaterialInstance();
 	
-	void AttachToOwningPawn() const;
+	void AttachToOwningPawn(APawn* Pawn) const;
 	void WeaponTrace(FHitResult& OutHit, float TraceLength);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FPS|WeaponType")
@@ -69,6 +79,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "FPS|Ammo")
 	int32 StartingCarriedAmmo;
 	
+	EWeaponStatus WeaponStatus;
 protected:
 	virtual void BeginPlay() override;
 	
