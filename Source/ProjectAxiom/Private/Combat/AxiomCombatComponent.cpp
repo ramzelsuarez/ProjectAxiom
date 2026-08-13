@@ -71,6 +71,7 @@ void UAxiomCombatComponent::GetLifetimeReplicatedProps(TArray<class FLifetimePro
 	DOREPLIFETIME(UAxiomCombatComponent, Inventory);
 	DOREPLIFETIME(UAxiomCombatComponent, CurrentWeapon);
 	DOREPLIFETIME_CONDITION(UAxiomCombatComponent, bAiming, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UAxiomCombatComponent, CurrentReserveAmmo, COND_OwnerOnly);
 }
 
 void UAxiomCombatComponent::Initiate_CycleWeapon()
@@ -123,7 +124,7 @@ void UAxiomCombatComponent::Local_FireWeapon()
 	EPhysicalSurface ImpactSurfaceType = Hit.PhysMaterial.IsValid(false) ? Hit.PhysMaterial->SurfaceType.GetValue():SurfaceType1;
 	CurrentWeapon->Local_Fire(Hit.ImpactPoint, Hit.ImpactNormal, ImpactSurfaceType, true);
 	
-	OnRoundFired.Broadcast(CurrentWeapon->Ammo, CurrentWeapon->MagCapacity);
+	OnRoundFired.Broadcast(CurrentWeapon->Ammo, CurrentWeapon->MagCapacity, CurrentReserveAmmo);
 	
 	GetWorld()->GetTimerManager().SetTimer(FireTimer, this, &ThisClass::FireTimerFinished, CurrentWeapon->FireTime);
 	Server_FireWeapon(Hit);
@@ -195,6 +196,14 @@ void UAxiomCombatComponent::Server_Aim_Implementation(bool bPressed)
 	Local_Aim(bPressed);
 }
 
+void UAxiomCombatComponent::OnRep_CurrentReserveAmmo()
+{
+	if (IsValid(CurrentWeapon))
+	{
+		OnCurrentReserveAmmoChanged.Broadcast(CurrentReserveAmmo, CurrentWeapon->Ammo);
+	}
+}
+
 void UAxiomCombatComponent::Local_Aim(bool bPressed)
 {
 	bAiming = bPressed;
@@ -205,6 +214,9 @@ void UAxiomCombatComponent::Equip(AWeapon* Weapon)
 {
 	CurrentWeapon = Weapon;
 	CurrentWeapon->AttachToOwningPawn();
+	
+	CurrentReserveAmmo = ReserveAmmo.FindChecked(CurrentWeapon->WeaponType);
+	OnCurrentReserveAmmoChanged.Broadcast(CurrentReserveAmmo, Weapon->Ammo);
 }
 
 void UAxiomCombatComponent::SpawnInventory()
@@ -215,6 +227,7 @@ void UAxiomCombatComponent::SpawnInventory()
 	{
 		AWeapon* Weapon = SpawnWeapon(WeaponClass);
 		Inventory.AddUnique(Weapon);
+		ReserveAmmo.Add(Weapon->WeaponType, Weapon->StartingCarriedAmmo);
 	}
 	
 	if (Inventory.Num() > 0)

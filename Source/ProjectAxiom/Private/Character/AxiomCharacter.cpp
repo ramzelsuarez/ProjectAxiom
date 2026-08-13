@@ -228,13 +228,18 @@ void AAxiomCharacter::WeaponReplicated_Implementation()
 	if (!bWeaponFirstReplicated)
 	{
 		bWeaponFirstReplicated = true;
-		OnWeaponFirstReplicated.Broadcast(Combat->CurrentWeapon);
+		OnWeaponFirstReplicated.Broadcast(Combat->CurrentWeapon, Combat->bHitPlayer);
 	}
 }
 
 AWeapon* AAxiomCharacter::GetCurrentWeapon_Implementation()
 {
 	return Combat->CurrentWeapon;
+}
+
+int32 AAxiomCharacter::GetReserveAmmo_Implementation() const
+{
+	return Combat->CurrentReserveAmmo;
 }
 
 void AAxiomCharacter::Input_CycleWeapon()
