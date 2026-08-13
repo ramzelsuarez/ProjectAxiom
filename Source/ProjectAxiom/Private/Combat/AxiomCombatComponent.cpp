@@ -85,7 +85,6 @@ void UAxiomCombatComponent::Initiate_CycleWeapon()
 	
 	AdvanceWeaponIndex();
 	Local_CycleWeapon(Local_WeaponIndex);
-	// Server_CycleWeapon(WeaponIndex)
 }
 
 void UAxiomCombatComponent::Local_CycleWeapon(int32 WeaponIndex)
@@ -107,6 +106,7 @@ void UAxiomCombatComponent::Local_CycleWeapon(int32 WeaponIndex)
 	if (bIsLocal)
 	{
 		Server_CycleWeapon(WeaponIndex);
+		Mesh->GetAnimInstance()->OnMontageBlendingOut.AddDynamic(this, &ThisClass::BlendOut_CycleWeapon);
 	}
 }
 
@@ -128,16 +128,33 @@ void UAxiomCombatComponent::Multicast_CycleWeapon_Implementation(int32 WeaponInd
 	}
 }
 
-// Local_CycleWeapon
-	// Play the equip montage of the weapon at WeaponIndex
-		// if locally-controlled, play 1P, otherwise play 3P
-	// if locally controlled Server_CycleWeapon()
-	// Set the WeaponStatus on CurrentWeapon to Cycling
+void UAxiomCombatComponent::Notify_CycleWeapon()
+{
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		5.f,
+		FColor::Cyan,
+		TEXT("Notify_CycleWeapon"),
+			false);
+}
 
-// Server_CycleWeapon
-	// Set the local weapon index
-	// Local_CycleWeapon(WeaponIndex)
-
+void UAxiomCombatComponent::BlendOut_CycleWeapon(UAnimMontage* Montage, bool bInterrupted)
+{
+	UAnimInstance* AnimInstance = IPlayerInterface::Execute_GetMesh1P(GetOwner())->GetAnimInstance();
+	if (IsValid(AnimInstance) && AnimInstance->OnMontageBlendingOut.IsAlreadyBound(this, &ThisClass::BlendOut_CycleWeapon))
+	{
+		AnimInstance->OnMontageBlendingOut.RemoveDynamic(this, &ThisClass::BlendOut_CycleWeapon);
+	}
+	
+	CurrentWeapon->WeaponStatus = EWeaponStatus::Idle;
+	
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		5.f,
+		FColor::Yellow,
+		TEXT("BlendOut_CycleWeapon"),
+			false);
+}
 
 void UAxiomCombatComponent::Initiate_ReloadWeapon()
 {

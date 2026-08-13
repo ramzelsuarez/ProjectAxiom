@@ -242,6 +242,11 @@ int32 AAxiomCharacter::GetReserveAmmo_Implementation() const
 	return Combat->CurrentReserveAmmo;
 }
 
+void AAxiomCharacter::Notify_CycleWeapon_Implementation()
+{
+	Combat->Notify_CycleWeapon();
+}
+
 void AAxiomCharacter::Input_CycleWeapon()
 {
 	Combat->Initiate_CycleWeapon();
