@@ -247,6 +247,11 @@ void AAxiomCharacter::Notify_CycleWeapon_Implementation()
 	Combat->Notify_CycleWeapon();
 }
 
+void AAxiomCharacter::Notify_ReloadWeapon_Implementation()
+{
+	Combat->Notify_ReloadWeapon();
+}
+
 void AAxiomCharacter::Input_CycleWeapon()
 {
 	Combat->Initiate_CycleWeapon();
