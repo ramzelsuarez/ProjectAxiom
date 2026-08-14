@@ -11,6 +11,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Data/WeaponData.h"
+#include "Elimination/EliminationComponent.h"
 #include "Game/AxiomGameModeBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -54,6 +55,9 @@ AAxiomCharacter::AAxiomCharacter()
 	Combat = CreateDefaultSubobject<UAxiomCombatComponent>("Combat");
 	Combat->SetIsReplicated(true);
 	
+	Elimination = CreateDefaultSubobject<UEliminationComponent>("Elimination");
+	Elimination->SetIsReplicated(false);
+	
 	Health = CreateDefaultSubobject<UHealthComponent>("Health");
 	Health->SetIsReplicated(true);
 	
@@ -74,6 +78,11 @@ void AAxiomCharacter::BeginPlay()
 	if (AAxiomPlayerController* PC = Cast<AAxiomPlayerController>(GetController()); IsValid(PC))
 	{
 		PC->bPawnAlive = true;
+	}
+	
+	if (HasAuthority())
+	{
+		Combat->OnRoundReported.AddDynamic(Elimination, &UEliminationComponent::OnRoundReported);
 	}
 }
 

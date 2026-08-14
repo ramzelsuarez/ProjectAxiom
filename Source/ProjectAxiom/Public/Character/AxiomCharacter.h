@@ -9,6 +9,7 @@
 #include "ShooterTypes/ShooterTypes.h"
 #include "AxiomCharacter.generated.h"
 
+class UEliminationComponent;
 class UHealthComponent;
 class UAxiomCombatComponent;
 class UCameraComponent;
@@ -77,6 +78,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Combat")
 	TObjectPtr<UAxiomCombatComponent> Combat;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Elimination")
+	TObjectPtr<UEliminationComponent> Elimination;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Camera")
 	TObjectPtr<UCameraComponent> FirstPersonCamera;

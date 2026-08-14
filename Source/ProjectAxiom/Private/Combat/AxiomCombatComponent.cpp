@@ -337,6 +337,8 @@ void UAxiomCombatComponent::Server_FireWeapon_Implementation(const FHitResult& H
 	if (!IsValid(CurrentWeapon)) return;
 	if (CurrentWeapon->Ammo <= 0) return;
 	
+	// TODO: Broadcast OnRoundReported
+	
 	if (IsValid(Hit.GetActor()) && Hit.GetActor()->Implements<UPlayerInterface>())
 	{
 		IPlayerInterface::Execute_DoDamage(Hit.GetActor(), CurrentWeapon->Damage, GetOwner());
