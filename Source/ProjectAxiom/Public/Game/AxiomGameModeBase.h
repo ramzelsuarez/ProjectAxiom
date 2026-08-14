@@ -4,11 +4,12 @@
 #include "GameFramework/GameModeBase.h"
 #include "AxiomGameModeBase.generated.h"
 
-/**
- * Base GameMode class for Project Axiom.
- */
+
 UCLASS()
 class PROJECTAXIOM_API AAxiomGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+public:
+	
+	void RequestRespawn(ACharacter* Character, AController* Controller);
 };
