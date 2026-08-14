@@ -339,7 +339,7 @@ void UAxiomCombatComponent::Server_FireWeapon_Implementation(const FHitResult& H
 	
 	if (IsValid(Hit.GetActor()) && Hit.GetActor()->Implements<UPlayerInterface>())
 	{
-		IPlayerInterface::Execute_DoDamage(Hit.GetActor(), 0.f, GetOwner());
+		IPlayerInterface::Execute_DoDamage(Hit.GetActor(), CurrentWeapon->Damage, GetOwner());
 	}
 	
 	if (GetNetMode() != NM_ListenServer || !Cast<APawn>(GetOwner())->IsLocallyControlled())

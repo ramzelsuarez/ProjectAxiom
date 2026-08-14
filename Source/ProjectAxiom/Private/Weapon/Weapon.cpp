@@ -38,6 +38,7 @@ AWeapon::AWeapon()
 	StartingCarriedAmmo = 10;
 	Sequence = 0;
 	WeaponStatus = EWeaponStatus::Idle;
+	Damage = 15.f;
 }
 
 USkeletalMeshComponent* AWeapon::GetMesh1P() const
