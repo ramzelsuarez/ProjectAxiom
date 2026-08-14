@@ -60,6 +60,9 @@ public:
 	
 	bool HasWeaponFirstReplicated() const { return bWeaponFirstReplicated; }
 	
+	UPROPERTY(EditDefaultsOnly, Category = "FPS|HitReact")
+	TArray<TObjectPtr<UAnimMontage>> HitReacts;
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Combat")
 	TObjectPtr<UAxiomCombatComponent> Combat;
@@ -82,6 +85,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "FPS|TurnInPlace")
 	ETurningInPlace TurningStatus;
 	
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_HitReact(int32 MontageIndex);
 private:
 	
 	void Input_CycleWeapon();

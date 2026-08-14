@@ -4,6 +4,7 @@
 #include "Character/AxiomCharacter.h"
 
 #include "EnhancedInputComponent.h"
+#include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Combat/AxiomCombatComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -265,8 +266,24 @@ bool AAxiomCharacter::DoDamage_Implementation(float DamageAmount, AActor* Damage
 	// Change health by DamageAmount
 	// Play a Hit React Montage (also multicast hit react)
 	// calculate whether or not damage was lethal
+	
+	const int32 MontageSelection = FMath::RandRange(0, HitReacts.Num() - 1);
+	Multicast_HitReact(MontageSelection);
+	
 	return false;
 }
+
+void AAxiomCharacter::Multicast_HitReact_Implementation(int32 MontageIndex)
+{
+	if (GetNetMode() != NM_DedicatedServer && !IsLocallyControlled())
+	{
+		if (HitReacts.IsValidIndex(MontageIndex))
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(HitReacts[MontageIndex]);
+		}
+	}
+}
+
 
 void AAxiomCharacter::Input_CycleWeapon()
 {

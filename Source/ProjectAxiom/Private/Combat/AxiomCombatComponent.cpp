@@ -336,6 +336,12 @@ void UAxiomCombatComponent::Server_FireWeapon_Implementation(const FHitResult& H
 {
 	if (!IsValid(CurrentWeapon)) return;
 	if (CurrentWeapon->Ammo <= 0) return;
+	
+	if (IsValid(Hit.GetActor()) && Hit.GetActor()->Implements<UPlayerInterface>())
+	{
+		IPlayerInterface::Execute_DoDamage(Hit.GetActor(), 0.f, GetOwner());
+	}
+	
 	if (GetNetMode() != NM_ListenServer || !Cast<APawn>(GetOwner())->IsLocallyControlled())
 	{
 		CurrentWeapon->Auth_Fire();
