@@ -9,6 +9,7 @@
 #include "ShooterTypes/ShooterTypes.h"
 #include "AxiomCharacter.generated.h"
 
+class UHealthComponent;
 class UAxiomCombatComponent;
 class UCameraComponent;
 class USpringArmComponent;
@@ -64,6 +65,10 @@ public:
 	TArray<TObjectPtr<UAnimMontage>> HitReacts;
 	
 protected:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Health")
+	TObjectPtr<UHealthComponent> Health;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FPS|Combat")
 	TObjectPtr<UAxiomCombatComponent> Combat;
 	
