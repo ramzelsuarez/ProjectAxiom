@@ -12,4 +12,5 @@ class PROJECTAXIOM_API AAxiomGameModeBase : public AGameModeBase
 public:
 	
 	void RequestRespawn(ACharacter* Character, AController* Controller);
+	
 };
