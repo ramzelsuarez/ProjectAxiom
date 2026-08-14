@@ -300,6 +300,10 @@ void AAxiomCharacter::Multicast_HitReact_Implementation(int32 MontageIndex)
 
 void AAxiomCharacter::OnDeathStarted()
 {
+	if (HasAuthority())
+	{
+		Combat->DestroyInventory();
+	}
 	if (GetNetMode() != NM_DedicatedServer)
 	{
 		DeathEffects();
