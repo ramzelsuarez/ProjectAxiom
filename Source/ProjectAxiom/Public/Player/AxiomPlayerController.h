@@ -17,6 +17,7 @@ class PROJECTAXIOM_API AAxiomPlayerController : public APlayerController
 public:
 	AAxiomPlayerController();
 	
+	bool bPawnAlive;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;

@@ -92,6 +92,13 @@ protected:
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_HitReact(int32 MontageIndex);
+	
+	UFUNCTION()
+	void OnDeathStarted();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void DeathEffects();
+	
 private:
 	
 	void Input_CycleWeapon();

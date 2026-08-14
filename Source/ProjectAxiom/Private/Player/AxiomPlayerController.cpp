@@ -10,6 +10,7 @@
 AAxiomPlayerController::AAxiomPlayerController()
 {
 	bReplicates = true;
+	bPawnAlive = true;
 }
 
 void AAxiomPlayerController::BeginPlay()
@@ -38,6 +39,7 @@ void AAxiomPlayerController::SetupInputComponent()
 void AAxiomPlayerController::Input_Crouch()
 {
 	if (!IsValid(GetCharacter())) return;
+	if (!bPawnAlive) return;
 	
 	if (UCharacterMovementComponent* CMC = GetCharacter()->GetCharacterMovement(); IsValid(CMC))
 	{
@@ -48,6 +50,8 @@ void AAxiomPlayerController::Input_Crouch()
 void AAxiomPlayerController::Input_Jump()
 {
 	if (!IsValid(GetCharacter())) return;
+	if (!bPawnAlive) return;
+
 	UCharacterMovementComponent* CMC = GetCharacter()->GetCharacterMovement(); 
 	if (!IsValid(CMC)) return;
 	
@@ -64,6 +68,8 @@ void AAxiomPlayerController::Input_Jump()
 
 void AAxiomPlayerController::Input_Move(const FInputActionValue& InputActionValue)
 {
+	if (!bPawnAlive) return;
+	
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -80,6 +86,8 @@ void AAxiomPlayerController::Input_Move(const FInputActionValue& InputActionValu
 
 void AAxiomPlayerController::Input_Look(const FInputActionValue& InputActionValue)
 {
+	if (!bPawnAlive) return;
+	
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 	AddYawInput(InputAxisVector.X);
 	AddPitchInput(InputAxisVector.Y);
