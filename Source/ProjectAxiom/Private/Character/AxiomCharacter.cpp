@@ -260,6 +260,14 @@ void AAxiomCharacter::AddAmmo_Implementation(const FGameplayTag& WeaponType, int
 	}
 }
 
+bool AAxiomCharacter::DoDamage_Implementation(float DamageAmount, AActor* DamageInstigator)
+{
+	// Change health by DamageAmount
+	// Play a Hit React Montage (also multicast hit react)
+	// calculate whether or not damage was lethal
+	return false;
+}
+
 void AAxiomCharacter::Input_CycleWeapon()
 {
 	Combat->Initiate_CycleWeapon();
