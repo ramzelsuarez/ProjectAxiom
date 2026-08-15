@@ -5,9 +5,11 @@
 
 #include "GameFramework/Actor.h"
 #include "GameFramework/Pawn.h"
+#include "Game/ShooterGameStateBase.h"
 #include "Player/ShooterPlayerState.h"
 #include "ShooterTypes/ShooterTypes.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "Tools/UEdMode.h"
 
 UEliminationComponent::UEliminationComponent()
@@ -16,6 +18,8 @@ UEliminationComponent::UEliminationComponent()
 	SequentialElimInterval = 2.f;
 	LastElimTime = 0.f;
 	SequentialElims = 0;
+	Streak = 0;
+	ElimsNeededForStreak = 5;
 }
 
 void UEliminationComponent::OnRoundReported(AActor* Attacker, AActor* Victim, bool bHit, bool bHeadShot, bool bLethal)
@@ -45,8 +49,13 @@ void UEliminationComponent::ProcessElimination(bool bHeadShot, AShooterPlayerSta
 	
 	ProcessHeadshot(bHeadShot, SpecialElimType, AttackerPS);
 	ProcessSequentialEliminations(SpecialElimType, AttackerPS);
-	// Process Streaks
-	// Handle First Blood
+	ProcessStreaks(SpecialElimType, AttackerPS, VictimPS);
+	
+	AShooterGameStateBase* GameState = Cast<AShooterGameStateBase>(UGameplayStatics::GetGameState(AttackerPS));
+	if (IsValid(GameState))
+	{
+		HandleFirstBlood(GameState, SpecialElimType, AttackerPS);
+	}
 	// Update Leader Status
 	
 	// if (Has Special Elim Types)
@@ -81,6 +90,41 @@ void UEliminationComponent::ProcessSequentialEliminations(ESpecialElimType& OutE
 	{
 		OutElimType |= ESpecialElimType::Sequential;
 		AttackerPS->AddSequentialElim(SequentialElims);
+	}
+}
+
+void UEliminationComponent::ProcessStreaks(ESpecialElimType& OutElimType, AShooterPlayerState* AttackerPS,
+	AShooterPlayerState* VictimPS)
+{
+	++Streak;
+	if (Streak >= ElimsNeededForStreak)
+	{
+		OutElimType |= ESpecialElimType::Streak;
+		AttackerPS->SetOnStreak(true);
+		AttackerPS->UpdateHighestStreak(Streak);
+	}
+	if (VictimPS->IsOnStreak())
+	{
+		OutElimType |= ESpecialElimType::Showstopper;
+		AttackerPS->AddShowStopperElim();
+		VictimPS->SetOnStreak(false);
+	}
+	if (AttackerPS->GetLastAttacker() == VictimPS)
+	{
+		OutElimType |= ESpecialElimType::Revenge;
+		AttackerPS->AddRevengeElim();
+		AttackerPS->SetLastAttacker(nullptr);
+	}
+	VictimPS->SetLastAttacker(AttackerPS);
+}
+
+void UEliminationComponent::HandleFirstBlood(AShooterGameStateBase* GameState, ESpecialElimType& OutElimType,
+	AShooterPlayerState* AttackerPS)
+{
+	if (!GameState->HasFirstBloodBeenHad())
+	{
+		OutElimType |= ESpecialElimType::FirstBlood;
+		AttackerPS->GotFirstBlood();
 	}
 }
 
