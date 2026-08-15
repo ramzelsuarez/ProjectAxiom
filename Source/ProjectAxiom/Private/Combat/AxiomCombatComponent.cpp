@@ -14,6 +14,7 @@
 #include "Interfaces/PlayerInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
 #include "ProjectAxiom/ProjectAxiom.h"
 #include "Weapon/Weapon.h"
 
@@ -337,12 +338,16 @@ void UAxiomCombatComponent::Server_FireWeapon_Implementation(const FHitResult& H
 	if (!IsValid(CurrentWeapon)) return;
 	if (CurrentWeapon->Ammo <= 0) return;
 	
-	// TODO: Broadcast OnRoundReported
+	const bool bHit = IsValid(Hit.GetActor()) && Hit.GetActor()->Implements<UPlayerInterface>();
+	const bool bHeadShot = Hit.BoneName == "head";
+	bool bLethal = false;
 	
-	if (IsValid(Hit.GetActor()) && Hit.GetActor()->Implements<UPlayerInterface>())
+	if (bHit)
 	{
-		IPlayerInterface::Execute_DoDamage(Hit.GetActor(), CurrentWeapon->Damage, GetOwner());
+		bLethal; IPlayerInterface::Execute_DoDamage(Hit.GetActor(), CurrentWeapon->Damage, GetOwner());
 	}
+	
+	OnRoundReported.Broadcast(GetOwner(), Hit.GetActor(), bHit, bHeadShot, bLethal);
 	
 	if (GetNetMode() != NM_ListenServer || !Cast<APawn>(GetOwner())->IsLocallyControlled())
 	{

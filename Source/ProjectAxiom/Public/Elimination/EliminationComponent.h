@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Player/ShooterPlayerState.h"
 #include "EliminationComponent.generated.h"
 
 
@@ -17,4 +18,10 @@ public:
 	
 	UFUNCTION()
 	void OnRoundReported(AActor* Attacker, AActor* Victim, bool bHit, bool bHeadShot, bool bLethal);
+	
+private:
+	
+	AShooterPlayerState* GetPlayerStateFromActor(AActor* Actor);
+	void ProcessHitOrMiss(bool bHit, AShooterPlayerState* AttackerPS);
+	void ProcessElimination(bool bHeadShot, AShooterPlayerState* AttackerPS, AShooterPlayerState* VictimPS);
 };
