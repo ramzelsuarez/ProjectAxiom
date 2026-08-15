@@ -8,6 +8,8 @@
 #include "EliminationComponent.generated.h"
 
 
+enum class ESpecialElimType : uint16;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PROJECTAXIOM_API UEliminationComponent : public UActorComponent
 {
@@ -24,4 +26,5 @@ private:
 	AShooterPlayerState* GetPlayerStateFromActor(AActor* Actor);
 	void ProcessHitOrMiss(bool bHit, AShooterPlayerState* AttackerPS);
 	void ProcessElimination(bool bHeadShot, AShooterPlayerState* AttackerPS, AShooterPlayerState* VictimPS);
+	void ProcessHeadshot(bool bHeadShot, ESpecialElimType& OutElimType, AShooterPlayerState* AttackerPS);
 };
