@@ -5,7 +5,7 @@
 
 AShooterPlayerState::AShooterPlayerState()
 {
-	NetUpdateFrequency = 100.f;
+	SetNetUpdateFrequency(100.f);
 	
 	ScoredElims = 0;
 	Defeats = 0;
@@ -121,4 +121,14 @@ bool AShooterPlayerState::IsOnStreak() const
 APlayerState* AShooterPlayerState::GetLastAttacker() const
 {
 	return LastAttacker.IsValid() ? LastAttacker.Get() : nullptr;
+}
+
+int32 AShooterPlayerState::GetScoredElims() const
+{
+	return ScoredElims;
+}
+
+void AShooterPlayerState::Client_LostTheLead_Implementation()
+{
+	// TODO: Show the client that they've lost the lead
 }
