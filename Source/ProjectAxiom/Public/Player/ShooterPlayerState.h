@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/SpecialElimData.h"
 #include "GameFramework/PlayerState.h"
 #include "ShooterPlayerState.generated.h"
 
@@ -11,12 +12,17 @@ class USpecialElim;
 class USpecialElimData;
 enum class ESpecialElimType : uint16;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChanged, int32, NewScore);
+
 UCLASS()
 class PROJECTAXIOM_API AShooterPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 public:
 	AShooterPlayerState();
+	
+	UPROPERTY(BlueprintAssignable)
+	FScoreChanged OnScoreChanged;
 	
 	void AddScoredElim();
 	void AddDefeat();
@@ -52,6 +58,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "FPS|SpecialElims")
 	TSubclassOf<USpecialElim> SpecialElimWidgetClass;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "FPS|SpecialElims")
+	float ElimDisplayTime;
+	
 private:
 	int32 ScoredElims;
 	int32 Defeats;
@@ -70,4 +79,8 @@ private:
 	TWeakObjectPtr<APlayerState> LastAttacker;
 	
 	TArray<ESpecialElimType> DecodeElimBitmask(ESpecialElimType ElimTypeBitmask);
+	void ProcessNextSpecialElim();
+	void ShowSpecialElim(const FSpecialElimInfo& ElimMessageInfo);
+	TQueue<FSpecialElimInfo> SpecialElimQueue;
+	bool bIsProcessingQueue;
 };

@@ -24,5 +24,5 @@ public:
 	void InitializeWidget(const FString& ElimMessage, UTexture2D* ElimTexture);
 	
 	UFUNCTION(BlueprintCallable)
-	static void CenterWidget(UUserWidget* UserWidget, float VerticalRatio = 0.f);
+	static void CenterWidget(UUserWidget* Widget, float VerticalRatio = 0.f);
 };

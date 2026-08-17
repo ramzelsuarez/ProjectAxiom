@@ -10,12 +10,19 @@ class UInputAction;
 class UInputMappingContext;
 struct FInputActionValue;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerStateReplicated);
+
 UCLASS()
 class PROJECTAXIOM_API AAxiomPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:
 	AAxiomPlayerController();
+	
+	UPROPERTY(BlueprintAssignable)
+	FPlayerStateReplicated OnPlayerStateReplicated;
+	
+	virtual void OnRep_PlayerState() override;
 	
 	bool bPawnAlive;
 protected:

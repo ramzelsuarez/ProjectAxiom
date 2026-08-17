@@ -13,6 +13,12 @@ AAxiomPlayerController::AAxiomPlayerController()
 	bPawnAlive = true;
 }
 
+void AAxiomPlayerController::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	OnPlayerStateReplicated.Broadcast();
+}
+
 void AAxiomPlayerController::BeginPlay()
 {
 	Super::BeginPlay();

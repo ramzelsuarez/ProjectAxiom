@@ -6,7 +6,6 @@
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
-#include "Framework/MultiBox/MultiBoxDefs.h"
 
 void USpecialElim::InitializeWidget(const FString& ElimMessage, UTexture2D* ElimTexture)
 {

@@ -90,7 +90,7 @@ void UEliminationComponent::ProcessSequentialEliminations(ESpecialElimType& OutE
 	}
 	LastElimTime = CurrentTime;
 	
-	if (SequentialElims >1)
+	if (SequentialElims > 1)
 	{
 		OutElimType |= ESpecialElimType::Sequential;
 		AttackerPS->AddSequentialElim(SequentialElims);
