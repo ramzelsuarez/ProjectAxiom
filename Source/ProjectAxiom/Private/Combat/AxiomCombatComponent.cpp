@@ -344,7 +344,7 @@ void UAxiomCombatComponent::Server_FireWeapon_Implementation(const FHitResult& H
 	
 	if (bHit)
 	{
-		bLethal; IPlayerInterface::Execute_DoDamage(Hit.GetActor(), CurrentWeapon->Damage, GetOwner());
+		bLethal = IPlayerInterface::Execute_DoDamage(Hit.GetActor(), CurrentWeapon->Damage, GetOwner());
 	}
 	
 	OnRoundReported.Broadcast(GetOwner(), Hit.GetActor(), bHit, bHeadShot, bLethal);
