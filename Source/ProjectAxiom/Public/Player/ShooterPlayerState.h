@@ -7,7 +7,9 @@
 #include "ShooterPlayerState.generated.h"
 
 
+class USpecialElim;
 class USpecialElimData;
+enum class ESpecialElimType : uint16;
 
 UCLASS()
 class PROJECTAXIOM_API AShooterPlayerState : public APlayerState
@@ -47,6 +49,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FPS|SpecialElims")
 	TObjectPtr<USpecialElimData> SpecialElimData;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "FPS|SpecialElims")
+	TSubclassOf<USpecialElim> SpecialElimWidgetClass;
+	
 private:
 	int32 ScoredElims;
 	int32 Defeats;
@@ -63,4 +68,6 @@ private:
 	bool bWinner;
 	
 	TWeakObjectPtr<APlayerState> LastAttacker;
+	
+	TArray<ESpecialElimType> DecodeElimBitmask(ESpecialElimType ElimTypeBitmask);
 };

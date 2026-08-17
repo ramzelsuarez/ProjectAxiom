@@ -3,6 +3,9 @@
 
 #include "Player/ShooterPlayerState.h"
 
+#include "Data/SpecialElimData.h"
+#include "UI/Elims/SpecialElim.h"
+
 AShooterPlayerState::AShooterPlayerState()
 {
 	SetNetUpdateFrequency(100.f);
@@ -128,8 +131,27 @@ int32 AShooterPlayerState::GetScoredElims() const
 	return ScoredElims;
 }
 
+TArray<ESpecialElimType> AShooterPlayerState::DecodeElimBitmask(ESpecialElimType ElimTypeBitmask)
+{
+	TArray<ESpecialElimType> ValidElims;
+	
+	uint16 BitmaskValue = static_cast<uint16>(ElimTypeBitmask);
+	
+	for (uint16 i = 0; i < 16; i++)
+	{
+		if (BitmaskValue & (1 << i))
+		{
+			ESpecialElimType EnumValue = static_cast<ESpecialElimType>(1 << i);
+			ValidElims.Add(EnumValue);
+		}
+	}
+	
+	return ValidElims;
+}
+
 void AShooterPlayerState::Client_ScoredElim_Implementation(int32 ElimScore)
 {
+	
 }
 
 void AShooterPlayerState::Client_SpecialElim_Implementation(const ESpecialElimType& SpecialElim,
@@ -140,5 +162,16 @@ void AShooterPlayerState::Client_SpecialElim_Implementation(const ESpecialElimTy
 
 void AShooterPlayerState::Client_LostTheLead_Implementation()
 {
-	// TODO: Show the client that they've lost the lead
+	ensure(IsValid(SpecialElimData));
+	FSpecialElimInfo& ElimMessageInfo = SpecialElimData->SpecialElimInfo.FindChecked(ESpecialElimType::LostTheLead);
+	
+	if (IsValid(SpecialElimWidgetClass))
+	{
+		USpecialElim* ElimWidget = CreateWidget<USpecialElim>(GetPlayerController(), SpecialElimWidgetClass);
+		if (IsValid(ElimWidget))
+		{
+			ElimWidget->InitializeWidget(ElimMessageInfo.ElimMessage, ElimMessageInfo.ElimIcon);
+			ElimWidget->AddToViewport();
+		}
+	}
 }
