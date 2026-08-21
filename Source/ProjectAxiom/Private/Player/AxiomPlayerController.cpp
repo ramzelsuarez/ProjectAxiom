@@ -42,6 +42,13 @@ void AAxiomPlayerController::SetupInputComponent()
 	AxiomInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ThisClass::Input_Crouch);
 }
 
+void AAxiomPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+	
+	bPawnAlive = true;
+}
+
 void AAxiomPlayerController::Input_Crouch()
 {
 	if (!IsValid(GetCharacter())) return;
